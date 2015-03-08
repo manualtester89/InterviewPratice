@@ -126,7 +126,38 @@ public class LinkListApp{
     
   }
   
-    
+//If LinkList has cycle or not if yes then find start node.
+ public LinkList LoopStart(LinkList head){
+   LinkList first = head, second = head;
+   boolean flag =false;
+   while(first!=null){
+     first= first.getNext();
+     if(first==second){
+       flag= true;
+       break;
+     }
+     if(first==null){
+       break;
+     }
+     first=first.getNext();
+     if(first==second){
+       flag= true;
+       break;
+     }
+     second= second.getNext();
+   }
+   if(flag){
+     second= head;
+     while(second!=first){
+       second=second.getNext();
+       first= first.getNext();
+     }
+     return first;
+   }
+   return null;
+   
+ }  
+   
   
   
   
