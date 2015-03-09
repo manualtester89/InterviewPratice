@@ -321,6 +321,40 @@ public class LinkListApp{
    return newNode;
  }
  
+//pariwise reversal
+ public LinkList pairWiseReversal(LinkList head){
+   if(head==null|| head.getNext()==null){
+     return null;
+   }
+   LinkList temp = head.getNext();
+   head.setNext(temp.getNext());
+   temp.setNext(head);
+   return pairWiseReversal(head.getNext());
+ }
+ 
+ public LinkList pairwiseRecursive(LinkList head){
+   if(head==null|| head.getNext()==null){
+     return null;
+   }
+   LinkList temp = head.getNext();
+   head.setNext(temp.getNext());
+   temp.setNext(head);
+   pairwiseRecursive(head.getNext());
+   return temp;
+   
+ }
+ 
+ public LinkList pairwiseIterative(LinkList head){
+   LinkList temp;
+   LinkList current = head;
+   while(current!=null && current.getNext()!=null){
+     temp=current.getNext();
+     current.setNext(temp.getNext());
+     temp.setNext(current);
+     current=current.getNext();
+   }
+   return head;
+ } 
   
   
   
