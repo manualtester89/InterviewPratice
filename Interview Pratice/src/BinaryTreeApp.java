@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -244,14 +245,14 @@ public class BinaryTreeApp {
 	}
 
 	// tree are mirror of each other
-	public boolean isMirror(BinaryTree root1, BinaryTree root2) {
+	public boolean isMirrored(BinaryTree root1, BinaryTree root2) {
 		if (root1 == null && root2 == null)
 			return true;
 		if (root1 == null || root2 == null)
 			return false;
 		return root1.getData() == root2.getData()
-				&& isMirror(root1.getLeft(), root2.getRight())
-				&& isMirror(root1.getRight(), root2.getLeft());
+				&& isMirrored(root1.getLeft(), root2.getRight())
+				&& isMirrored(root1.getRight(), root2.getLeft());
 	}
 
 	// Trees are structurially identical
@@ -294,5 +295,99 @@ public class BinaryTreeApp {
 		}
 		return maxCount;
 	}
+	
+	public static  int hashCode(String str){
+		int[] test = new int[26];
+		for (int i = 0; i < str.length(); i++) {
+			test[str.charAt(i)-'a']++;
+			
+		}	
+		
+		String result = Arrays.toString(test);
+		System.out.println(result +" result");
+		return result.hashCode();
+	}
+	public boolean equals(String a, String b){
+		return hashCode(a)==hashCode(b);
+	}
+	
+	public static void main(String[] args) {
+		BinaryTreeApp test = new BinaryTreeApp();
+		System.out.println(hashCode("aacbxyzabcdefghijklmnopqrstuvwxyz")+"   "+ hashCode("zxycabazyxabcdefghijklmnopqrstuvw"));
+		System.out.println(test.equals("aacbxyz","zxycaba"));
+		System.out.println(test.equals("aacbxyzabcdefghijklmnopqrstuvwxyz","zxycabazyxabcdefghijklmnopqrstuvw"));
+	}
+	
+	// Print all paths to from root to leaf time complexity O(n) space O(n)
+	public void printPaths(BinaryTree root, int path[],int pathIndex){
+	 if(root==null){
+	   print(path, pathIndex);
+	   return;
+	 } 
+	  path[pathIndex]=root.getData();
+	  pathIndex++;
+	  printPaths(root.getLeft(),path,pathIndex);
+	  printPaths(root.getRight(),path,pathIndex);
+	}
+
+	public void print(int path[], int pathIndex){
+	  for (int i=0; i<pathIndex;i++){
+	    System.out.print(path[i]+ " " );
+	  }
+	}
+
+	//has path root to leaf equal to sum time complexity O(n) space O(n)
+	public boolean hasPath(BinaryTree root, int sum){
+	  if(root==null)return sum==0;
+	  return hasPath(root.getLeft(),sum-root.getData())||hasPath(root.getRight(),sum-root.getData());
+	}
+
+	//sum of all Elements in tree time complexity O(n) space O(n)
+	public int sumOfTree(BinaryTree root){
+	  if(root!=null)return 0;
+	  else return sumOfTree(root.getLeft())+ root.getData()+ sumOfTree(root.getRight());
+	}
+
+	//convert Tree to its mirror
+	public BinaryTree convertToMirror(BinaryTree root){
+	  if(root==null)return null;
+	  convertToMirror(root.getLeft());
+	  convertToMirror(root.getRight());
+	  BinaryTree temp = root.getLeft();
+	  root.setLeft(root.getRight());
+	  root.setRight(temp);
+	  return root;
+	}
+
+	//isMirror of tree
+	public boolean isMirror(BinaryTree root1, BinaryTree root2){
+	  if(root1==null && root2==null)return true;
+	  if(root1==null || root2==null)return false;
+	  return root1.getData()== root2.getData()&&isMirror(root1.getLeft(),root2.getRight())&& isMirror(root1.getRight(),root2.getLeft());
+	}
+
+	//Build Binary Tree
+	static int preIndex=0;
+	public BinaryTree BuildBinaryTree(int[] inOrder, int[] preOrder,int start, int end){
+	  
+	  if(start>end)return null;
+	  BinaryTree root = new BinaryTree(preOrder[preIndex]);
+	  preIndex++;
+	  if(start==end)return root;
+	  
+	  int inIndex = Search(inOrder, start,end, root.getData());
+	  root.setLeft(BuildBinaryTree(inOrder,preOrder,start, inIndex-1));
+	  root.setRight(BuildBinaryTree(inOrder,preOrder,inIndex+1, end));
+	  return root;
+	}
+	
+	public int Search(int[] inOrder,int low,int high,int data ){
+		if(low>high)return -1;
+		int mid  = low +((high-low)/2);
+		if(inOrder[mid]== data)return mid;
+		if(inOrder[mid]>data)return Search(inOrder,low, mid-1,data);
+		else return Search(inOrder,mid+1, high,data);
+	}
+	
 
 }
