@@ -410,4 +410,52 @@ public class BinaryTreeApp {
 			return Search(inOrder, mid + 1, high, data);
 	}
 
+	// find LCA
+	public BinaryTree LCA(BinaryTree roota, BinaryTree rootb, BinaryTree root) {
+		if (root == null)
+			return null;
+		if (root == roota || root == rootb) {
+			return root;
+		}
+		BinaryTree left = LCA(roota, rootb, root.getLeft());
+		BinaryTree right = LCA(roota, rootb, root.getRight());
+		if (left != null && right != null)
+			return root;
+		if (left == null)
+			return right;
+		else
+			return left;
+	}
+
+	// print ZigZag Order
+	public void zigZagOrder(BinaryTree root) {
+		if (root == null)
+			return;
+		Stack<BinaryTree> current = new Stack<>();
+		Stack<BinaryTree> next = new Stack<>();
+		current.push(root);
+		boolean flag = true;
+		while (!current.isEmpty()) {
+			BinaryTree temp = current.pop();
+			if (temp != null) {
+				System.out.println(temp.getData());
+				if (flag) {
+					current.push(temp.getLeft());
+					current.push(temp.getRight());
+				} else {
+					current.push(temp.getRight());
+					current.push(temp.getLeft());
+				}
+			}
+			if (current.isEmpty()) {
+				flag = !flag;
+				Stack<BinaryTree> st = current;
+				current = next;
+				next = st;
+			}
+
+		}
+
+	}
+
 }
